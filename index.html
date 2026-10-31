@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#071b35">
+  <title>CRICKET SHORT PRO</title>
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;background:#071b35;color:white;font-family:Arial,sans-serif}
+    header{background:#0d2b50;padding:22px 15px;text-align:center}
+    header h1{margin:0;color:#39e6a5;font-size:25px}
+    header p{margin:8px 0 0;color:#d8e8f5}
+    nav{display:flex;overflow:auto;background:#102c4c;padding:10px;gap:8px}
+    nav a{color:white;text-decoration:none;background:#1c4168;padding:10px 13px;border-radius:8px;white-space:nowrap}
+    main{padding:15px;max-width:700px;margin:auto}
+    .card{background:#12365b;border:1px solid #28557c;border-radius:13px;padding:16px;margin:14px 0}
+    h2{color:#39e6a5;margin-top:0}
+    button{background:#16c784;color:#062b20;border:0;padding:12px 16px;border-radius:8px;font-weight:bold}
+    input,select{width:100%;padding:12px;margin:7px 0;background:#071b35;color:white;border:1px solid #47708e;border-radius:7px}
+    .score{font-size:27px;font-weight:bold;text-align:center;margin:15px}
+    .muted{color:#b8ccdf;font-size:13px}
+    footer{text-align:center;padding:25px;color:#b8ccdf}
+  </style>
+</head>
+<body>
+<header>
+  <h1>🏏 CRICKET SHORT PRO</h1>
+  <p>Live Cricket • Six & Four Videos • Highlights • Scorecard</p>
+</header>
+
+<nav>
+  <a href="#live">🔴 Live</a>
+  <a href="#scorecard">📊 Scorecard</a>
+  <a href="#ball">⚾ Ball-by-Ball</a>
+  <a href="#videos">🎬 Videos</a>
+</nav>
+
+<main>
+  <section class="card" id="live">
+    <h2>🔴 Live Cricket Score</h2>
+    <p class="muted">अपना मैच शुरू करके स्कोर अपडेट करें।</p>
+    <input id="team1" placeholder="पहली टीम का नाम" value="India">
+    <input id="team2" placeholder="दूसरी टीम का नाम" value="New Zealand">
+    <button onclick="startMatch()">Start Match</button>
+    <div class="score" id="score">0/0</div>
+    <p style="text-align:center" id="match">India vs New Zealand</p>
+    <p style="text-align:center" id="overs">Overs: 0.0</p>
+    <div style="display:flex;flex-wrap:wrap;gap:8px">
+      <button onclick="addRuns(1)">+1 Run</button>
+      <button onclick="addRuns(2)">+2 Runs</button>
+      <button onclick="addRuns(3)">+3 Runs</button>
+      <button onclick="addRuns(4)">🏏 Four</button>
+      <button onclick="addRuns(6)">🚀 Six</button>
+      <button onclick="addWicket()">❌ Wicket</button>
+    </div>
+  </section>
+
+  <section class="card" id="scorecard">
+    <h2>📊 Scorecard</h2>
+    <p id="scorecardText">अभी कोई मैच शुरू नहीं हुआ।</p>
+  </section>
+
+  <section class="card" id="ball">
+    <h2>⚾ Ball-by-Ball</h2>
+    <div id="commentary">मैच शुरू होने पर यहाँ बॉल की जानकारी दिखेगी।</div>
+  </section>
+
+  <section class="card" id="videos">
+    <h2>🎬 Cricket Video Library</h2>
+    <p>अपने क्रिकेट वीडियो चुनें।</p>
+    <input type="file" id="videoFile" accept="video/*">
+    <video id="preview" controls playsinline style="width:100%;display:none;margin-top:10px"></video>
+    <p class="muted">वीडियो का प्रीव्यू इसी डिवाइस पर दिखेगा।</p>
+  </section>
+</main>
+
+<footer>🏏 CRICKET SHORT PRO • Version 1.0</footer>
+
+<script>
+let runs=0,wickets=0,balls=0,events=[];
+function startMatch(){
+  runs=0;wickets=0;balls=0;events=[];
+  document.getElementById("match").textContent=
+    document.getElementById("team1").value+" vs "+
+    document.getElementById("team2").value;
+  update();
+}
+function addRuns(n){
+  if(wickets>=10)return;
+  runs+=n;balls++;
+  events.unshift(n+" रन");
+  update();
+}
+function addWicket(){
+  if(wickets>=10)return;
+  wickets++;balls++;
+  events.unshift("विकेट!");
+  update();
+}
+function update(){
+  document.getElementById("score").textContent=runs+"/"+wickets;
+  document.getElementById("overs").textContent=
+    "Overs: "+Math.floor(balls/6)+"."+(balls%6);
+  document.getElementById("scorecardText").textContent=
+    "कुल रन: "+runs+" | विकेट: "+wickets+" | गेंदें: "+balls;
+  document.getElementById("commentary").innerHTML=
+    events.slice(0,12).map(e=>"<p>"+e+"</p>").join("");
+}
+document.getElementById("videoFile").addEventListener("change",function(){
+  if(this.files[0]){
+    let video=document.getElementById("preview");
+    video.src=URL.createObjectURL(this.files[0]);
+    video.style.display="block";
+  }
+});
+</script>
+</body>
+</html>
