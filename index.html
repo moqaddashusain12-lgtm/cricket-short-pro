@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CRICKET SHORT PRO V4.2</title>
+<title>CRICKET SHORT PRO V4.3</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#071426;color:#fff;font-family:Arial,sans-serif}
+body{margin:0;background:#071426;color:white;font-family:Arial,sans-serif}
 header{background:#102c4c;padding:18px;text-align:center}
 header h2{margin:0;color:#35e6a0}
 header p{margin:6px 0 0;color:#c5d7e8;font-size:13px}
@@ -14,33 +14,29 @@ header p{margin:6px 0 0;color:#c5d7e8;font-size:13px}
 .card{background:#10233a;border:1px solid #254361;border-radius:13px;padding:14px;margin-bottom:13px}
 h3{margin:0 0 12px;color:#35e6a0}
 input,select{width:100%;padding:12px;margin:5px 0 10px;border-radius:8px;border:1px solid #45617c;background:#071426;color:white;font-size:16px}
-button{border:0;border-radius:9px;padding:12px;margin:4px;background:#1768a8;color:white;font-weight:bold;font-size:15px;cursor:pointer}
-button:active{transform:scale(.97)}
+button{border:0;border-radius:9px;padding:12px;margin:4px;background:#1768a8;color:white;font-weight:bold;font-size:15px}
 .run{width:29%;background:#087c59;font-size:19px}
 .extra{background:#7651a8}
 .danger{background:#bd3448}
 .secondary{background:#52677d}
 .score{text-align:center;font-size:42px;font-weight:bold;color:#35e6a0}
-.sub{text-align:center;color:#d0dceb}
+.sub{text-align:center;color:#d0dceb;margin:5px}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
 table{width:100%;border-collapse:collapse;font-size:13px}
 th,td{padding:9px 5px;border-bottom:1px solid #34506a;text-align:center}
 th{color:#35e6a0}
 .status{color:#ffd166;font-weight:bold}
-.result{background:#164a38;color:#fff;padding:14px;border-radius:10px;text-align:center;font-size:18px;font-weight:bold}
+.result{background:#164a38;padding:14px;border-radius:10px;text-align:center;font-size:18px;font-weight:bold}
 .small{font-size:12px;color:#b8c9d9}
-#app{display:none}
 </style>
 </head>
 <body>
-
 <header>
-<h2>🏏 CRICKET SHORT PRO V4.2</h2>
+<h2>🏏 CRICKET SHORT PRO V4.3</h2>
 <p>Complete Manual Cricket Scoring System</p>
 </header>
 
 <div class="container">
-
 <div class="card" id="setup">
 <h3>🏏 नया मैच शुरू करें</h3>
 <label>पहली टीम</label>
@@ -55,13 +51,12 @@ th{color:#35e6a0}
 <button onclick="startMatch()">Start Match ▶</button>
 </div>
 
-<div id="app">
-
+<div id="app" style="display:none">
 <div class="card">
-<h3 id="matchTitle">India vs Pakistan</h3>
-<div class="sub" id="inningsTitle">पारी 1</div>
-<div class="score" id="score">0/0</div>
-<div class="sub" id="overs">Overs: 0.0</div>
+<h3 id="matchTitle"></h3>
+<div class="sub" id="inningsTitle"></div>
+<div class="score" id="score"></div>
+<div class="sub" id="overs"></div>
 <div class="sub" id="target"></div>
 <div class="sub" id="runrate"></div>
 <div id="result"></div>
@@ -111,7 +106,7 @@ th{color:#35e6a0}
 
 <div class="card">
 <h3>⚾ Ball-by-Ball Commentary</h3>
-<div id="commentary" class="small">अभी कोई गेंद नहीं हुई है।</div>
+<div id="commentary" class="small"></div>
 </div>
 
 <div class="card">
@@ -120,12 +115,11 @@ th{color:#35e6a0}
 <button class="secondary" onclick="restoreMatch()">Restore Saved Match</button>
 <button class="danger" onclick="newMatch()">नया मैच / Reset</button>
 </div>
-
 </div>
 </div>
 
 <script>
-const KEY="cricketShortProV42";
+const KEY="cricketShortProV43";
 let state=null;
 let history=[];
 
@@ -166,15 +160,20 @@ function startMatch(){
 }
 
 function cur(){return state.innings[state.idx]}
-function legalOvers(i){return Math.floor(i.legal/6)+"."+(i.legal%6)}
-function overEnded(i){return i.legal>0 && i.legal%6===0}
+function legalOvers(b){
+ return Math.floor(b.legal/6)+"."+(b.legal%6);
+}
+function inningsOvers(i){
+ return Math.floor(i.legal/6)+"."+(i.legal%6);
+}
 function isOver(i){
- return i.wickets>=10 || i.legal>=state.max*6 ||
+ return i.wickets>=10 ||
+ i.legal>=state.max*6 ||
  (i.target!==null && i.runs>=i.target);
 }
 function snapshot(){
  history.push(JSON.stringify(state));
- if(history.length>40)history.shift();
+ if(history.length>50)history.shift();
 }
 function save(){
  try{
@@ -184,7 +183,11 @@ function save(){
 }
 function record(text){
  cur().log.unshift(text);
- if(cur().log.length>100)cur().log.length=100;
+ if(cur().log.length>150)cur().log.length=150;
+}
+function swap(){
+ let i=cur(),t=i.striker;
+ i.striker=i.non;i.non=t;
 }
 
 function finishIfNeeded(){
@@ -198,17 +201,21 @@ function finishIfNeeded(){
  }
 }
 
-function swap(){
- let i=cur(),t=i.striker;
- i.striker=i.non;i.non=t;
-}
+/* वैध गेंद बल्लेबाज और गेंदबाज दोनों के खाते में */
 function ballComplete(){
  let i=cur();
+ let bw=i.bowlers[i.currentBowler];
+
  i.legal++;
- if(overEnded(i)){
+ bw.legal++;
+
+ if(i.legal%6===0){
+  record("ओवर समाप्त: "+inningsOvers(i));
   swap();
-  record("ओवर समाप्त: "+legalOvers(i));
-  let name=askName("नए ओवर का गेंदबाज चुनें","Bowler "+(i.bowlers.length+1));
+
+  let name=askName("नया ओवर शुरू। गेंदबाज का नाम लिखें",
+   "Bowler "+(i.bowlers.length+1));
+
   i.bowlers.push({name,r:0,w:0,legal:0});
   i.currentBowler=i.bowlers.length-1;
  }
@@ -216,16 +223,26 @@ function ballComplete(){
 
 function addRuns(n){
  let i=cur();
- if(state.finished||i.completed||isOver(i)){alert("यह पारी समाप्त हो चुकी है।");return}
+ if(state.finished||i.completed||isOver(i)){
+  alert("यह पारी समाप्त हो चुकी है।");return;
+ }
  snapshot();
- let bat=i.batters[i.striker],bw=i.bowlers[i.currentBowler];
- bat.r+=n;bat.b++;
+
+ let bat=i.batters[i.striker];
+ let bw=i.bowlers[i.currentBowler];
+
+ bat.r+=n;
+ bat.b++;
  if(n===4)bat.f++;
  if(n===6)bat.s++;
+
  i.runs+=n;
  bw.r+=n;
+
  record(n+" रन — "+bat.name);
+
  if(n%2===1)swap();
+
  ballComplete();
  finishIfNeeded();
  save();render();
@@ -233,33 +250,56 @@ function addRuns(n){
 
 function addExtra(type){
  let i=cur();
- if(state.finished||i.completed||isOver(i)){alert("यह पारी समाप्त हो चुकी है।");return}
+ if(state.finished||i.completed||isOver(i)){
+  alert("यह पारी समाप्त हो चुकी है।");return;
+ }
  snapshot();
+
  let bw=i.bowlers[i.currentBowler];
- i.runs++;i.extras++;
- if(type==="Wide"||type==="No Ball")bw.r++;
- record(type+" +1");
- if(type==="Wide"||type==="No Ball"){
-  // Wide और No Ball पर गेंद legal नहीं मानी जाती।
- }else{
+ i.runs++;
+ i.extras++;
+
+ if(type==="Wide"){
+  bw.r++;
+  record("Wide +1");
+ }
+ else if(type==="No Ball"){
+  bw.r++;
+  record("No Ball +1");
+ }
+ else if(type==="Bye"){
+  record("Bye +1");
   ballComplete();
  }
+ else if(type==="Leg Bye"){
+  record("Leg Bye +1");
+  ballComplete();
+ }
+
  finishIfNeeded();
  save();render();
 }
 
 function wicket(){
  let i=cur();
- if(state.finished||i.completed||isOver(i)){alert("यह पारी समाप्त हो चुकी है।");return}
+ if(state.finished||i.completed||isOver(i)){
+  alert("यह पारी समाप्त हो चुकी है।");return;
+ }
  snapshot();
+
  let bat=i.batters[i.striker];
  let how=prompt("आउट होने का तरीका लिखें","Caught")||"Out";
  bat.out=true;
- let bw=i.bowlers[i.currentBowler];
- if(!/run out|retired|obstructing/i.test(how.toLowerCase()))bw.w++;
- i.wickets++;
  bat.b++;
+
+ let bw=i.bowlers[i.currentBowler];
+ if(!/run out|retired|obstructing/i.test(how.toLowerCase())){
+  bw.w++;
+ }
+
+ i.wickets++;
  record("WICKET! "+bat.name+" — "+how);
+
  ballComplete();
 
  if(i.wickets<10 && !isOver(i)){
@@ -267,13 +307,15 @@ function wicket(){
   i.batters.push({name,r:0,b:0,f:0,s:0,out:false});
   i.striker=i.batters.length-1;
  }
+
  finishIfNeeded();
  save();render();
 }
 
 function changeStrike(){
  if(state.finished||cur().completed)return;
- snapshot();swap();record("बल्लेबाजों ने छोर बदला");
+ snapshot();swap();
+ record("बल्लेबाजों ने छोर बदला");
  save();render();
 }
 
@@ -281,6 +323,7 @@ function changeBowler(){
  let i=cur();
  if(state.finished||i.completed)return;
  snapshot();
+
  let name=askName("नए गेंदबाज का नाम","New Bowler");
  i.bowlers.push({name,r:0,w:0,legal:0});
  i.currentBowler=i.bowlers.length-1;
@@ -291,17 +334,18 @@ function changeBowler(){
 function endInnings(){
  let i=cur();
  if(state.finished)return;
+
  if(state.idx===0){
   if(!confirm("पहली पारी समाप्त करके दूसरी पारी शुरू करें?"))return;
   snapshot();
   i.completed=true;
-  let target=i.runs+1;
-  let next=makeInnings(i.bowling,i.batting,target);
+
+  let next=makeInnings(i.bowling,i.batting,i.runs+1);
   state.innings.push(next);
   state.idx=1;
   state.finished=false;
   state.result="";
-  alert("दूसरी पारी शुरू! अब "+next.batting+" के दोनों बल्लेबाज और "+next.bowling+" का गेंदबाज सेट करें।");
+
   save();render();
  }else{
   snapshot();
@@ -315,9 +359,9 @@ function endInnings(){
 function calculateResult(){
  let a=state.innings[0],b=state.innings[1];
  if(!b)return;
+
  if(b.runs>=b.target){
-  let wicketsLeft=10-b.wickets;
-  state.result=b.batting+" ने "+wicketsLeft+" विकेट से मैच जीता।";
+  state.result=b.batting+" ने "+(10-b.wickets)+" विकेट से मैच जीता।";
  }else if(a.runs>b.runs){
   state.result=a.batting+" ने "+(a.runs-b.runs)+" रन से मैच जीता।";
  }else if(a.runs===b.runs){
@@ -337,7 +381,9 @@ function finishManually(){
 }
 
 function undo(){
- if(!history.length){alert("Undo के लिए कोई पिछला स्कोर नहीं है।");return}
+ if(!history.length){
+  alert("Undo के लिए कोई पिछला स्कोर नहीं है।");return;
+ }
  state=JSON.parse(history.pop());
  save();render();
 }
@@ -351,7 +397,7 @@ function newMatch(){
 
 function restoreMatch(){
  let raw=localStorage.getItem(KEY);
- if(!raw){alert("कोई सेव किया हुआ V4.2 मैच नहीं मिला।");return}
+ if(!raw){alert("कोई सेव किया हुआ V4.3 मैच नहीं मिला।");return}
  try{
   state=JSON.parse(raw);
   document.getElementById("setup").style.display="none";
@@ -363,58 +409,76 @@ function restoreMatch(){
 function render(){
  if(!state)return;
  let i=cur();
+
  document.getElementById("matchTitle").textContent=state.a+" vs "+state.b;
  document.getElementById("inningsTitle").textContent=
  "पारी "+(state.idx+1)+" • "+(state.max===20?"T20":"ODI")+" • "+i.batting+" की बल्लेबाजी";
+
  document.getElementById("score").textContent=i.runs+"/"+i.wickets;
- document.getElementById("overs").textContent="Overs: "+legalOvers(i);
+ document.getElementById("overs").textContent="Overs: "+inningsOvers(i);
+
  document.getElementById("target").textContent=
- i.target===null?"पहली पारी":"Target: "+i.target+" | जरूरत: "+Math.max(0,i.target-i.runs)+" रन";
+ i.target===null?"पहली पारी":
+ "Target: "+i.target+" | जरूरत: "+Math.max(0,i.target-i.runs)+" रन";
+
  document.getElementById("runrate").textContent=
  "Run Rate: "+(i.legal?(i.runs/(i.legal/6)).toFixed(2):"0.00");
 
- let result=document.getElementById("result");
- result.innerHTML=state.finished?'<div class="result">🏆 '+state.result+'</div>':
- (i.completed?'<div class="status">पारी समाप्त — अगली पारी शुरू करें।</div>':
- '<div class="status">🔴 LIVE SCORING</div>');
+ document.getElementById("result").innerHTML=
+ state.finished?'<div class="result">🏆 '+safe(state.result)+'</div>':
+ i.completed?'<div class="status">पारी समाप्त — अगली पारी शुरू करें।</div>':
+ '<div class="status">🔴 LIVE SCORING</div>';
 
  let rows="<table><tr><th>Batter</th><th>R</th><th>B</th><th>4s</th><th>6s</th><th>Status</th></tr>";
+
  i.batters.forEach((b,n)=>{
-  rows+="<tr><td>"+safe(b.name)+(n===i.striker?" ⭐":"")+"</td><td>"+b.r+"</td><td>"+b.b+"</td><td>"+b.f+"</td><td>"+b.s+"</td><td>"+(b.out?"Out":"Not Out")+"</td></tr>";
+  rows+="<tr><td>"+safe(b.name)+(n===i.striker?" ⭐":"")+
+  "</td><td>"+b.r+"</td><td>"+b.b+"</td><td>"+b.f+"</td><td>"+b.s+
+  "</td><td>"+(b.out?"Out":"Not Out")+"</td></tr>";
  });
  rows+="</table>";
  document.getElementById("batters").innerHTML=rows;
 
  let bw=i.bowlers[i.currentBowler];
  document.getElementById("bowler").innerHTML=
- "<b>"+safe(bw.name)+" ⭐</b><br>Overs: "+Math.floor(bw.legal/6)+"."+(bw.legal%6)+
+ "<b>"+safe(bw.name)+" ⭐</b><br>Overs: "+legalOvers(bw)+
  " | Runs: "+bw.r+" | Wickets: "+bw.w;
 
  let cards="";
  state.innings.forEach((inn,n)=>{
-  cards+="<div class='card'><b>पारी "+(n+1)+" - "+safe(inn.batting)+"</b><h2>"+inn.runs+"/"+inn.wickets+"</h2>";
-  cards+="Overs: "+legalOvers(inn)+" | Extras: "+inn.extras;
+  cards+="<div class='card'><b>पारी "+(n+1)+" - "+safe(inn.batting)+
+  "</b><h2>"+inn.runs+"/"+inn.wickets+"</h2>";
+  cards+="Overs: "+inningsOvers(inn)+" | Extras: "+inn.extras;
+
   cards+="<table><tr><th>Batter</th><th>Runs</th><th>Balls</th><th>4s</th><th>6s</th></tr>";
   inn.batters.forEach(b=>{
-   cards+="<tr><td>"+safe(b.name)+"</td><td>"+b.r+"</td><td>"+b.b+"</td><td>"+b.f+"</td><td>"+b.s+"</td></tr>";
+   cards+="<tr><td>"+safe(b.name)+"</td><td>"+b.r+"</td><td>"+b.b+
+   "</td><td>"+b.f+"</td><td>"+b.s+"</td></tr>";
   });
-  cards+="</table><br><b>गेंदबाज</b><table><tr><th>Name</th><th>Overs</th><th>Runs</th><th>Wkts</th></tr>";
+  cards+="</table><br><b>गेंदबाज</b>";
+  cards+="<table><tr><th>Name</th><th>Overs</th><th>Runs</th><th>Wkts</th></tr>";
+
   inn.bowlers.forEach(b=>{
-   cards+="<tr><td>"+safe(b.name)+"</td><td>"+Math.floor(b.legal/6)+"."+(b.legal%6)+"</td><td>"+b.r+"</td><td>"+b.w+"</td></tr>";
+   cards+="<tr><td>"+safe(b.name)+"</td><td>"+legalOvers(b)+
+   "</td><td>"+b.r+"</td><td>"+b.w+"</td></tr>";
   });
+
   cards+="</table></div>";
  });
+
  document.getElementById("scorecards").innerHTML=cards;
 
  document.getElementById("commentary").innerHTML=
- i.log.length?i.log.map(x=>"<div>"+safe(x)+"</div>").join(""):"अभी कोई गेंद नहीं हुई है।";
+ i.log.length?i.log.map(x=>"<div>"+safe(x)+"</div>").join(""):
+ "अभी कोई गेंद नहीं हुई है।";
 }
 
 function safe(s){
- return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+ return String(s).replace(/[&<>"']/g,c=>({
+ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+ }[c]));
 }
 
-// सेव किया हुआ मैच अपने आप खोलें
 window.addEventListener("load",()=>{
  let raw=localStorage.getItem(KEY);
  if(raw){
