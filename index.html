@@ -2,50 +2,43 @@
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cricket Short Pro V4.5</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cricket Short Pro V4.6</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#eef2f7;color:#172033;font-family:Arial,sans-serif}
 header{background:#102b50;color:white;padding:17px;text-align:center}
-header h2{margin:0;font-size:23px}
-header p{margin:6px 0 0;font-size:12px;color:#cbdcf2}
+header h2{margin:0}
+header p{margin:6px 0 0;font-size:12px}
 .container{max-width:650px;margin:auto;padding:12px}
 .card{background:white;padding:15px;border-radius:13px;margin:12px 0;box-shadow:0 2px 9px #0001}
 h3{margin:0 0 12px;color:#174c83}
-input,select{width:100%;padding:12px;margin:5px 0 12px;border:1px solid #ccd5e0;border-radius:8px;font-size:16px;background:white}
-button{border:0;border-radius:9px;padding:12px 14px;margin:4px;font-size:15px;font-weight:bold;cursor:pointer;background:#1769aa;color:white}
-button:active{opacity:.75}
-button.green{background:#159447}
-button.red{background:#d83c3c}
-button.orange{background:#e28b18}
-button.gray{background:#65758b}
-button.light{background:#e5edf7;color:#173e67}
-button:disabled{opacity:.4}
-.score{background:#102b50;color:white;text-align:center;padding:19px;border-radius:13px}
-.score .big{font-size:42px;font-weight:bold}
-.score .small{font-size:14px;margin-top:7px;color:#d6e7ff}
+input,select{width:100%;padding:12px;margin:5px 0 12px;border:1px solid #ccd5e0;border-radius:8px;font-size:16px}
+button{border:0;border-radius:9px;padding:12px;margin:4px;font-size:14px;font-weight:bold;background:#1769aa;color:white}
+.green{background:#159447}.red{background:#d83c3c}.orange{background:#e28b18}.gray{background:#65758b}.light{background:#e5edf7;color:#173e67}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
 .grid button{margin:0;font-size:19px;padding:17px 5px}
-.row{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid #eee}
-.row:last-child{border:0}
-.badge{display:inline-block;background:#e7f0fa;color:#174c83;padding:5px 9px;border-radius:20px;font-size:12px}
-.hidden{display:none!important}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th,td{padding:9px 5px;text-align:left;border-bottom:1px solid #e5e9ef}
-th{background:#edf3fa}
-.comment{padding:9px 0;border-bottom:1px solid #eee;font-size:14px}
 .actions{display:flex;flex-wrap:wrap;gap:5px}
 .actions button{flex:1}
-.note{font-size:12px;color:#64748b;line-height:1.5}
+.score{background:#102b50;color:white;text-align:center;padding:19px;border-radius:13px}
+.big{font-size:42px;font-weight:bold}
+.small{font-size:14px;margin-top:7px;color:#d6e7ff}
+.row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #eee}
+.hidden{display:none!important}
+table{width:100%;border-collapse:collapse;font-size:12px}
+td,th{padding:8px 4px;border-bottom:1px solid #ddd;text-align:left}
+th{background:#edf3fa}
+.note{font-size:12px;color:#64748b}
+.comment{padding:9px 0;border-bottom:1px solid #eee;font-size:13px}
+#saveStatus{font-size:12px;color:#159447;text-align:center;margin-top:8px}
 footer{text-align:center;color:#778398;font-size:12px;padding:20px}
 </style>
 </head>
 <body>
 
 <header>
-<h2>🏏 CRICKET SHORT PRO V4.5</h2>
-<p>Professional Manual Cricket Scorer</p>
+<h2>🏏 CRICKET SHORT PRO V4.6</h2>
+<p>Manual Cricket Scorer • Auto Save • Download • Share</p>
 </header>
 
 <div class="container">
@@ -56,24 +49,40 @@ footer{text-align:center;color:#778398;font-size:12px;padding:20px}
 <input id="team1" value="India">
 <label>दूसरी टीम</label>
 <input id="team2" value="Pakistan">
-<label>मैच फॉर्मेट</label>
+<label>फॉर्मेट</label>
 <select id="format">
 <option value="20">T20 - 20 Overs</option>
 <option value="50">ODI - 50 Overs</option>
 </select>
 <button class="green" style="width:100%" onclick="startMatch()">START MATCH</button>
+<button id="resumeBtn" class="orange hidden" style="width:100%" onclick="resumeMatch()">🔄 RESUME SAVED MATCH</button>
+<p class="note">सेव किया हुआ मैच इसी मोबाइल और इसी ब्राउज़र में खुलेगा।</p>
 </section>
 
 <section id="game" class="hidden">
 
 <div class="card">
 <div class="score">
-<div id="matchTitle">India vs Pakistan</div>
-<div class="big" id="score">0/0</div>
-<div class="small" id="overs">0.0 Overs</div>
-<div class="small" id="runrate">Run Rate: 0.00</div>
+<div id="matchTitle"></div>
+<div class="big" id="score"></div>
+<div class="small" id="overs"></div>
+<div class="small" id="runrate"></div>
 <div class="small" id="target"></div>
 <div class="small" id="status"></div>
+</div>
+<div id="saveStatus">Auto Save चालू</div>
+</div>
+
+<div class="card">
+<h3>💾 मैच सेव और शेयर</h3>
+<div class="actions">
+<button class="green" onclick="saveMatch()">SAVE MATCH</button>
+<button class="orange" onclick="downloadScore()">DOWNLOAD</button>
+<button onclick="shareScore()">SHARE SCORE</button>
+</div>
+<div class="actions">
+<button class="gray" onclick="newMatch()">NEW MATCH</button>
+<button class="light" onclick="goHome()">HOME</button>
 </div>
 </div>
 
@@ -101,18 +110,17 @@ footer{text-align:center;color:#778398;font-size:12px;padding:20px}
 </div>
 
 <div class="card">
-<h3>⚠️ एक्स्ट्रा रन</h3>
+<h3>⚠️ Extras</h3>
 <div class="actions">
 <button class="orange" onclick="addWide()">Wide</button>
 <button class="orange" onclick="addNoBall()">No Ball</button>
-<button class="orange" onclick="addBye()">Bye</button>
-<button class="orange" onclick="addLegBye()">Leg Bye</button>
+<button class="orange" onclick="addExtra('Bye')">Bye</button>
+<button class="orange" onclick="addExtra('Leg Bye')">Leg Bye</button>
 </div>
-<p class="note">Wide और No Ball पर गेंद कानूनी गेंदों में नहीं गिनी जाएगी। Bye और Leg Bye कानूनी गेंद मानी जाएँगी।</p>
 </div>
 
 <div class="card">
-<h3>❌ विकेट</h3>
+<h3>❌ Wicket</h3>
 <button class="red" style="width:100%" onclick="wicket()">WICKET</button>
 </div>
 
@@ -123,440 +131,327 @@ footer{text-align:center;color:#778398;font-size:12px;padding:20px}
 <button class="light" onclick="undo()">Undo</button>
 <button class="light" onclick="endInnings()">End Innings</button>
 </div>
-<button class="red" style="width:100%" onclick="finishMatch()">Finish Match</button>
 </div>
 
 <div class="card">
-<h3>📊 स्कोरकार्ड</h3>
+<h3>📊 Scorecard</h3>
 <div id="scorecards"></div>
 </div>
 
 <div class="card">
-<h3>⚾ Ball-by-Ball Commentary</h3>
+<h3>⚾ Ball-by-Ball</h3>
 <div id="commentary"></div>
 </div>
 
 </section>
-
 </div>
 
-<footer>CRICKET SHORT PRO V4.5</footer>
+<footer>CRICKET SHORT PRO V4.6</footer>
 
 <script>
-let match=null;
-let undoStack=[];
+const KEY="cricketShortProV46";
+let match=null,undoStack=[];
 
-function makePlayer(name){
+function player(name){
 return {name,runs:0,balls:0,fours:0,sixes:0,out:false,dismissal:"Not Out"};
 }
-
-function makeBowler(name){
-return {name,balls:0,runs:0,wickets:0,maidens:0,overRuns:0};
+function bowler(name){
+return {name,balls:0,runs:0,wickets:0};
 }
-
-function newInnings(team,opponent,number,players,bowlerName){
+function innings(team,opponent,number,names,bowlerName){
 return {
-team,opponent,number,
-runs:0,wickets:0,balls:0,
-extras:0,
-batters:players.map(makePlayer),
-striker:0,nonStriker:1,
-bowlers:[makeBowler(bowlerName)],
-bowlerIndex:0,
-events:[],
-overRuns:0,
-complete:false
+team,opponent,number,runs:0,wickets:0,balls:0,extras:0,
+batters:names.map(player),striker:0,nonStriker:1,
+bowlers:[bowler(bowlerName)],bowlerIndex:0,
+events:[],complete:false
 };
 }
-
-function current(){
-return match.innings[match.innings.length-1];
+function cur(){return match.innings[match.innings.length-1]}
+function bw(){return cur().bowlers[cur().bowlerIndex]}
+function ov(i=cur()){return Math.floor(i.balls/6)+"."+(i.balls%6)}
+function rate(i=cur()){return i.balls?(i.runs/(i.balls/6)).toFixed(2):"0.00"}
+function target(){return match.innings[0].runs+1}
+function ask(label,def){
+let v=prompt(label,def||"");
+if(v===null)return null;
+return v.trim()||"Player";
 }
-function activeBowler(){
-return current().bowlers[current().bowlerIndex];
+function autoSave(){
+if(!match)return;
+try{
+localStorage.setItem(KEY,JSON.stringify(match));
+document.getElementById("saveStatus").textContent="✅ Auto Saved";
+}catch(e){
+document.getElementById("saveStatus").textContent="Save Error";
 }
-function legalBalls(i=current()){
-return i.balls;
 }
-function overs(i=current()){
-return Math.floor(i.balls/6)+"."+(i.balls%6);
+function saveMatch(){
+autoSave();
+alert("✅ आपका मैच मोबाइल में सेव हो गया!");
 }
-function rr(i=current()){
-return i.balls ? (i.runs/(i.balls/6)).toFixed(2):"0.00";
-}
-function saveUndo(){
-undoStack.push(JSON.stringify(match));
-if(undoStack.length>100)undoStack.shift();
-}
-function snapshot(){
-saveUndo();
-}
-function askName(label,defaultName){
-let n=prompt(label,defaultName||"");
-if(n===null)return null;
-n=n.trim();
-return n||"Player";
-}
-
-function startMatch(){
-let a=document.getElementById("team1").value.trim()||"India";
-let b=document.getElementById("team2").value.trim()||"Pakistan";
-if(a.toLowerCase()===b.toLowerCase()){
-alert("दोनों टीमों के नाम अलग रखें।");return;
-}
-let f=Number(document.getElementById("format").value);
-let x=askName(a+" के पहले बल्लेबाज का नाम","Batter 1");if(!x)return;
-let y=askName(a+" के दूसरे बल्लेबाज का नाम","Batter 2");if(!y)return;
-if(x===y){alert("दोनों बल्लेबाजों के नाम अलग रखें।");return;}
-let z=askName(b+" के पहले गेंदबाज का नाम","Bowler 1");if(!z)return;
-
-match={
-team1:a,team2:b,format:f,
-innings:[newInnings(a,b,1,[x,y],z)],
-result:""
-};
+function resumeMatch(){
+try{
+let data=localStorage.getItem(KEY);
+if(!data){alert("कोई सेव मैच नहीं मिला।");return}
+match=JSON.parse(data);
 undoStack=[];
 document.getElementById("setup").classList.add("hidden");
 document.getElementById("game").classList.remove("hidden");
 render();
+}catch(e){alert("सेव मैच नहीं खुल सका।")}
 }
-
-function ensurePlayable(){
-let i=current();
-if(i.complete||match.result){
-alert("यह पारी पूरी हो चुकी है।");return false;
+function startMatch(){
+let a=document.getElementById("team1").value.trim()||"India";
+let b=document.getElementById("team2").value.trim()||"Pakistan";
+let f=Number(document.getElementById("format").value);
+if(a.toLowerCase()===b.toLowerCase()){alert("टीमों के नाम अलग रखें");return}
+let x=ask(a+" का पहला बल्लेबाज","Batter 1");if(!x)return;
+let y=ask(a+" का दूसरा बल्लेबाज","Batter 2");if(!y)return;
+if(x.toLowerCase()===y.toLowerCase()){alert("दो अलग बल्लेबाज चुनें");return}
+let z=ask(b+" का पहला गेंदबाज","Bowler 1");if(!z)return;
+match={team1:a,team2:b,format:f,innings:[innings(a,b,1,[x,y],z)],result:""};
+undoStack=[];
+document.getElementById("setup").classList.add("hidden");
+document.getElementById("game").classList.remove("hidden");
+autoSave();render();
 }
-if(i.wickets>=10){
-alert("सभी विकेट गिर चुके हैं।");return false;
+function snap(){
+undoStack.push(JSON.stringify(match));
+if(undoStack.length>100)undoStack.shift();
 }
-if(i.balls>=match.format*6){
-alert("ओवर पूरे हो चुके हैं।");return false;
-}
+function playable(){
+let i=cur();
+if(match.result||i.complete){alert("पारी समाप्त है");return false}
+if(i.wickets>=10||i.balls>=match.format*6){alert("पारी समाप्त है");return false}
 return true;
 }
-
-function addBatter(i){
-if(i.batters.length>=11)return false;
-let n=askName("नए बल्लेबाज का नाम","New Batter");
-if(!n)return false;
-i.batters.push(makePlayer(n));
-return i.batters.length-1;
+function rotate(n){
+if(n%2){let i=cur(),t=i.striker;i.striker=i.nonStriker;i.nonStriker=t}
 }
-
-function rotate(i,count){
-if(count%2===1){
+function log(t){
+let i=cur();
+i.events.unshift({over:ov(i),score:i.runs+"/"+i.wickets,text:t});
+}
+function legal(b){
+let i=cur();i.balls++;b.balls++;
+}
+function nextOver(){
+let i=cur();
+if(i.balls>0&&i.balls%6===0&&i.balls<match.format*6){
 let t=i.striker;i.striker=i.nonStriker;i.nonStriker=t;
+let n=ask("अगले ओवर के गेंदबाज का नाम","New Bowler");
+if(n){i.bowlers.push(bowler(n));i.bowlerIndex=i.bowlers.length-1}
 }
 }
-
-function addLegalBall(i,bowler){
-i.balls++;
-bowler.balls++;
+function after(t,isLegal,runs){
+let i=cur();
+rotate(runs);log(t);
+if(i.wickets>=10||(match.innings.length===2&&i.runs>=target())||i.balls>=match.format*6){
+completeInnings();return;
 }
-
-function record(text){
-let i=current();
-i.events.unshift({
-over:overs(i),
-score:i.runs+"/"+i.wickets,
-text
-});
+if(isLegal)nextOver();
+autoSave();render();
 }
-
-function afterBall(text,legal=true,rotationRuns=0){
-let i=current();
-rotate(i,rotationRuns);
-record(text);
-if(i.wickets>=10){
-completeInnings();
-return;
-}
-if(match.innings.length===2 && i.runs>=target()){
-completeInnings();
-return;
-}
-if(i.balls>=match.format*6){
-completeInnings();
-return;
-}
-if(legal && i.balls%6===0){
-let t=i.striker;i.striker=i.nonStriker;i.nonStriker=t;
-activeBowler().maidens+=0;
-let name=askName("अगले ओवर के गेंदबाज का नाम","New Bowler");
-if(name){
-i.bowlers.push(makeBowler(name));
-i.bowlerIndex=i.bowlers.length-1;
-}
-}
-render();
-}
-
 function addRuns(r){
-if(!ensurePlayable())return;
-snapshot();
-let i=current(),s=i.batters[i.striker],b=activeBowler();
-s.runs+=r;s.balls++;
-if(r===4)s.fours++;
-if(r===6)s.sixes++;
-i.runs+=r;
-i.overRuns+=r;
-b.runs+=r;
-addLegalBall(i,b);
-afterBall(r===0?"Dot Ball":r+" Run",true,r);
+if(!playable())return;
+snap();
+let i=cur(),p=i.batters[i.striker],b=bw();
+p.runs+=r;p.balls++;
+if(r===4)p.fours++;
+if(r===6)p.sixes++;
+i.runs+=r;b.runs+=r;
+legal(b);
+after(r===0?"Dot Ball":r+" Run",true,r);
 }
-
 function addWide(){
-if(!ensurePlayable())return;
-let i=current(),b=activeBowler();
-let extra=prompt("कुल Wide अतिरिक्त रन लिखें। कम से कम 1", "1");
-if(extra===null)return;
-extra=Number(extra);
-if(!Number.isInteger(extra)||extra<1){alert("कम से कम 1 रन डालें।");return;}
-snapshot();
-i.runs+=extra;i.extras+=extra;i.overRuns+=extra;b.runs+=extra;
-afterBall("Wide: "+extra+" अतिरिक्त रन",false,extra-1);
+if(!playable())return;
+let n=prompt("कुल Wide रन (कम से कम 1)","1");
+if(n===null)return;n=Number(n);
+if(!Number.isInteger(n)||n<1){alert("गलत रन");return}
+snap();
+let i=cur(),b=bw();
+i.runs+=n;i.extras+=n;b.runs+=n;
+after("Wide "+n,false,n-1);
 }
-
 function addNoBall(){
-if(!ensurePlayable())return;
-let bat=prompt("No Ball पर बल्लेबाज के खाते में रन (0,1,2,3,4,6)", "0");
-if(bat===null)return;
-bat=Number(bat);
-if(![0,1,2,3,4,6].includes(bat)){alert("मान्य रन डालें।");return;}
-snapshot();
-let i=current(),s=i.batters[i.striker],b=activeBowler();
-let total=bat+1;
-s.runs+=bat;
-if(bat>0)s.balls+=0;
-if(bat===4)s.fours++;
-if(bat===6)s.sixes++;
-i.runs+=total;i.extras++;
-i.overRuns+=total;b.runs+=total;
-afterBall("No Ball: "+total+" रन (बल्लेबाज "+bat+")",false,bat);
+if(!playable())return;
+let n=prompt("No Ball पर बल्लेबाज के रन (0,1,2,3,4,6)","0");
+if(n===null)return;n=Number(n);
+if(![0,1,2,3,4,6].includes(n)){alert("गलत रन");return}
+snap();
+let i=cur(),p=i.batters[i.striker],b=bw();
+p.runs+=n;if(n===4)p.fours++;if(n===6)p.sixes++;
+i.runs+=n+1;i.extras++;b.runs+=n+1;
+after("No Ball: "+(n+1)+" रन",false,n);
 }
-
-function addBye(){
-addOtherExtra("Bye");
-}
-function addLegBye(){
-addOtherExtra("Leg Bye");
-}
-function addOtherExtra(type){
-if(!ensurePlayable())return;
-let n=prompt(type+" के कितने रन?", "1");
-if(n===null)return;
-n=Number(n);
-if(!Number.isInteger(n)||n<1){alert("कम से कम 1 रन डालें।");return;}
-snapshot();
-let i=current(),b=activeBowler();
-i.runs+=n;i.extras+=n;i.overRuns+=n;
+function addExtra(type){
+if(!playable())return;
+let n=prompt(type+" के रन","1");
+if(n===null)return;n=Number(n);
+if(!Number.isInteger(n)||n<1){alert("गलत रन");return}
+snap();
+let i=cur(),b=bw();
+i.runs+=n;i.extras+=n;
 i.batters[i.striker].balls++;
-addLegalBall(i,b);
-afterBall(type+": "+n+" रन",true,n);
+legal(b);
+after(type+": "+n,true,n);
 }
-
 function wicket(){
-if(!ensurePlayable())return;
-let i=current();
-let type=prompt("Wicket का प्रकार लिखें:\nBowled, Caught, LBW, Stumped, Hit Wicket, Run Out, Retired Hurt, Retired Out","Bowled");
+if(!playable())return;
+let i=cur();
+let types=["Bowled","Caught","LBW","Stumped","Hit Wicket","Run Out","Retired Out"];
+let type=prompt("विकेट का प्रकार लिखें:\n"+types.join(", "),"Bowled");
 if(type===null)return;
-type=type.trim();
-if(!type)return;
-let valid=["bowled","caught","lbw","stumped","hit wicket","run out","retired hurt","retired out"];
-if(!valid.includes(type.toLowerCase())){
-alert("दिए गए विकल्पों में से सही प्रकार लिखें।");return;
+type=types.find(x=>x.toLowerCase()===type.trim().toLowerCase());
+if(!type){alert("गलत विकेट प्रकार");return}
+let available=i.batters.map((p,k)=>p.name+(k===i.striker?" (Striker)":k===i.nonStriker?" (Non-striker)":"")).filter((v,k)=>!i.batters[k].out);
+let who=ask("कौन आउट हुआ?\n"+available.join("\n"),i.batters[i.striker].name);
+if(!who)return;
+let idx=i.batters.findIndex(p=>p.name.toLowerCase()===who.toLowerCase()&&!p.out);
+if(idx<0){alert("बल्लेबाज नहीं मिला");return}
+let runs=0;
+if(type==="Run Out"){
+let v=prompt("Run Out पर पूरे हुए रन","0");
+if(v===null)return;runs=Number(v);
+if(!Number.isInteger(runs)||runs<0||runs>6){alert("गलत रन");return}
 }
-let batterOptions=i.batters.map((p,k)=>p.name+(k===i.striker?" (Striker)":k===i.nonStriker?" (Non-striker)":"")+(p.out?" [Out]":"")).join("\n");
-let who=prompt("कौन-सा बल्लेबाज आउट हुआ?\n"+batterOptions,i.batters[i.striker].name);
-if(who===null)return;
-let outIndex=i.batters.findIndex(p=>p.name.toLowerCase()===who.trim().toLowerCase()&&!p.out);
-if(outIndex<0){alert("इस नाम का उपलब्ध बल्लेबाज नहीं मिला।");return;}
-
-let completed=0;
-if(type.toLowerCase()==="run out"){
-let r=prompt("Run Out पर कितने रन पूरे हुए?","0");
-if(r===null)return;
-completed=Number(r);
-if(!Number.isInteger(completed)||completed<0||completed>6){alert("0 से 6 तक रन डालें।");return;}
-}
-if(type.toLowerCase()==="retired hurt"){
-alert("Retired Hurt में विकेट नहीं गिना जाएगा। इस बल्लेबाज को वापस लाने की सुविधा अगले अपडेट में जोड़ी जाएगी।");
-return;
-}
-snapshot();
-let b=activeBowler();
-let p=i.batters[outIndex];
-if(type.toLowerCase()==="retired out"){
-p.dismissal="Retired Out";
-}else{
-p.out=true;
-p.dismissal=type;
-i.wickets++;
-if(!["run out"].includes(type.toLowerCase()))b.wickets++;
-}
-if(type.toLowerCase()==="run out"){
-i.runs+=completed;
-i.overRuns+=completed;
-b.runs+=completed;
-}
-let legal=type.toLowerCase()!=="retired out";
-if(legal)addLegalBall(i,b);
-rotate(i,completed);
-record(p.name+" "+(type.toLowerCase()==="run out"?"Run Out":type));
-if(i.wickets>=10){
+snap();
+let b=bw(),p=i.batters[idx];
+p.out=true;p.dismissal=type;i.wickets++;
+if(type!=="Run Out"&&type!=="Retired Out")b.wickets++;
+if(type==="Run Out"){i.runs+=runs;b.runs+=runs}
+legal(b);
+rotate(runs);
+log(p.name+" - "+type+(runs?" ("+runs+" रन)":""));
+if(i.wickets>=10||(match.innings.length===2&&i.runs>=target())||i.balls>=match.format*6){
 completeInnings();return;
 }
-if(match.innings.length===2 && i.runs>=target()){
-completeInnings();return;
+let name=ask("नए बल्लेबाज का नाम","New Batter");
+if(!name){p.out=false;p.dismissal="Not Out";i.wickets--;i.balls--;b.balls--;if(type!=="Run Out"&&type!=="Retired Out")b.wickets--;if(type==="Run Out"){i.runs-=runs;b.runs-=runs}render();return}
+let newIndex=i.batters.length;
+i.batters.push(player(name));
+if(idx===i.striker)i.striker=newIndex;
+else if(idx===i.nonStriker)i.nonStriker=newIndex;
+else if(i.batters[i.striker].out)i.striker=newIndex;
+else i.nonStriker=newIndex;
+if(i.balls%6===0)nextOver();
+autoSave();render();
 }
-if(i.balls>=match.format*6){
-completeInnings();return;
-}
-let next=addBatter(i);
-if(next===false){
-completeInnings();return;
-}
-if(outIndex===i.striker){
-i.striker=next;
-}else if(outIndex===i.nonStriker){
-i.nonStriker=next;
-}else{
-if(i.batters[i.striker].out)i.striker=next;
-else i.nonStriker=next;
-}
-if(legal && i.balls%6===0){
-let t=i.striker;i.striker=i.nonStriker;i.nonStriker=t;
-let name=askName("अगले ओवर के गेंदबाज का नाम","New Bowler");
-if(name){i.bowlers.push(makeBowler(name));i.bowlerIndex=i.bowlers.length-1;}
-}
-render();
-}
-
 function changeStrike(){
 if(!match||match.result)return;
-snapshot();
-let i=current(),t=i.striker;
-i.striker=i.nonStriker;i.nonStriker=t;
-render();
+snap();let i=cur(),t=i.striker;i.striker=i.nonStriker;i.nonStriker=t;
+autoSave();render();
 }
 function changeBowler(){
 if(!match||match.result)return;
-let i=current();
-let n=askName("नए गेंदबाज का नाम","New Bowler");
-if(!n)return;
-snapshot();
-i.bowlers.push(makeBowler(n));
-i.bowlerIndex=i.bowlers.length-1;
-render();
+let n=ask("नए गेंदबाज का नाम","New Bowler");if(!n)return;
+snap();let i=cur();i.bowlers.push(bowler(n));i.bowlerIndex=i.bowlers.length-1;
+autoSave();render();
 }
-
-function target(){
-if(match.innings.length<2)return null;
-return match.innings[0].runs+1;
-}
-
 function completeInnings(){
-let i=current();
-i.complete=true;
+let i=cur();i.complete=true;
 if(match.innings.length===1){
-let a=match.team2,b=match.team1;
-let x=askName(a+" के पहले बल्लेबाज का नाम","Batter 1");if(!x){match.result="Second innings not started";render();return;}
-let y=askName(a+" के दूसरे बल्लेबाज का नाम","Batter 2");if(!y){match.result="Second innings not started";render();return;}
-let z=askName(b+" के पहले गेंदबाज का नाम","Bowler 1");if(!z){match.result="Second innings not started";render();return;}
-match.innings.push(newInnings(a,b,2,[x,y],z));
-}else{
-calculateResult();
+let x=ask(match.team2+" के पहले बल्लेबाज का नाम","Batter 1");
+if(!x){match.result="दूसरी पारी शुरू नहीं हुई";autoSave();render();return}
+let y=ask(match.team2+" के दूसरे बल्लेबाज का नाम","Batter 2");
+if(!y){match.result="दूसरी पारी शुरू नहीं हुई";autoSave();render();return}
+let z=ask(match.team1+" के गेंदबाज का नाम","Bowler 1");
+if(!z){match.result="दूसरी पारी शुरू नहीं हुई";autoSave();render();return}
+match.innings.push(innings(match.team2,match.team1,2,[x,y],z));
+}else calculateResult();
+autoSave();render();
 }
-render();
-}
-
 function endInnings(){
 if(!match||match.result)return;
-if(!confirm("क्या आप इस पारी को समाप्त करना चाहते हैं?"))return;
-snapshot();
-completeInnings();
+if(!confirm("पारी समाप्त करें?"))return;
+snap();completeInnings();
 }
-
 function calculateResult(){
 let a=match.innings[0],b=match.innings[1];
-let t=a.runs+1;
-if(b.runs>=t){
-let wicketsLeft=10-b.wickets;
-match.result=b.team+" won by "+wicketsLeft+" wickets";
-}else if(a.runs>b.runs){
-match.result=a.team+" won by "+(a.runs-b.runs)+" runs";
-}else{
-match.result="Match Tied";
+if(b.runs>=a.runs+1)match.result=b.team+" won by "+(10-b.wickets)+" wickets";
+else if(a.runs>b.runs)match.result=a.team+" won by "+(a.runs-b.runs)+" runs";
+else match.result="Match Tied";
 }
-}
-
-function finishMatch(){
-if(!match)return;
-if(!confirm("क्या मैच समाप्त करना चाहते हैं?"))return;
-snapshot();
-if(match.innings.length===2)calculateResult();
-else match.result="Match stopped";
-render();
-}
-
 function undo(){
-if(!undoStack.length){alert("Undo उपलब्ध नहीं है।");return;}
-match=JSON.parse(undoStack.pop());
-render();
+if(!undoStack.length){alert("Undo उपलब्ध नहीं");return}
+match=JSON.parse(undoStack.pop());autoSave();render();
 }
-
+function scoreText(){
+let out="CRICKET SHORT PRO V4.6\n"+match.team1+" vs "+match.team2+"\n\n";
+match.innings.forEach(i=>{
+out+=i.team+": "+i.runs+"/"+i.wickets+" ("+ov(i)+" overs)\n";
+out+="Batting:\n";
+i.batters.forEach(p=>out+=p.name+" "+p.runs+" ("+p.balls+") "+p.dismissal+"\n");
+out+="Bowling:\n";
+i.bowlers.forEach(p=>out+=p.name+" "+Math.floor(p.balls/6)+"."+p.balls%6+" overs, "+p.runs+" runs, "+p.wickets+" wickets\n");
+out+="Extras: "+i.extras+"\n\n";
+});
+if(match.result)out+="RESULT: "+match.result;
+return out;
+}
+function downloadScore(){
+if(!match)return;
+let blob=new Blob([scoreText()],{type:"text/plain;charset=utf-8"});
+let url=URL.createObjectURL(blob),a=document.createElement("a");
+a.href=url;a.download="Cricket-Short-Scorecard.txt";a.click();
+URL.revokeObjectURL(url);
+}
+async function shareScore(){
+if(!match)return;
+let text=scoreText();
+if(navigator.share){
+try{await navigator.share({title:"Cricket Short Score",text})}catch(e){}
+}else{
+try{await navigator.clipboard.writeText(text);alert("Scorecard कॉपी हो गया। अब WhatsApp में Paste करें।")}
+catch(e){prompt("Scorecard कॉपी करें:",text)}
+}
+}
+function newMatch(){
+if(!confirm("नया मैच शुरू करें? मौजूदा मैच सेव रहेगा।"))return;
+document.getElementById("game").classList.add("hidden");
+document.getElementById("setup").classList.remove("hidden");
+document.getElementById("resumeBtn").classList.remove("hidden");
+}
+function goHome(){
+document.getElementById("game").classList.add("hidden");
+document.getElementById("setup").classList.remove("hidden");
+}
 function render(){
 if(!match)return;
-let i=current();
+let i=cur();
 document.getElementById("matchTitle").textContent=i.team+" vs "+i.opponent+" • Innings "+i.number;
 document.getElementById("score").textContent=i.runs+"/"+i.wickets;
-document.getElementById("overs").textContent=overs(i)+" Overs • "+match.format+" Overs Match";
-document.getElementById("runrate").textContent="Run Rate: "+rr(i);
+document.getElementById("overs").textContent=ov(i)+" Overs • "+match.format+" Overs Match";
+document.getElementById("runrate").textContent="Run Rate: "+rate(i);
 document.getElementById("target").textContent=match.innings.length===2?"Target: "+target()+" | Need: "+Math.max(0,target()-i.runs)+" runs":"First Innings";
 document.getElementById("status").textContent=match.result|| (i.complete?"Innings Complete":"● LIVE");
-
-let batHTML="";
-[i.striker,i.nonStriker].forEach((idx,k)=>{
-let p=i.batters[idx];
-if(p){
-batHTML+=`<div class="row"><span>${k===0?"★ ":""}${p.name}</span><b>${p.runs} (${p.balls})</b></div>`;
-}
+document.getElementById("batters").innerHTML=[i.striker,i.nonStriker].map((idx,k)=>{
+let p=i.batters[idx];return p?`<div class="row"><span>${k===0?"★ ":""}${p.name}</span><b>${p.runs} (${p.balls})</b></div>`:"";
+}).join("");
+let b=bw();
+document.getElementById("bowler").innerHTML=`<div class="row"><span>${b.name}</span><b>${Math.floor(b.balls/6)}.${b.balls%6}-${b.runs}-${b.wickets}</b></div><div class="note">Economy: ${b.balls?(b.runs/(b.balls/6)).toFixed(2):"0.00"}</div>`;
+let html="";
+match.innings.forEach(x=>{
+html+=`<h3>${x.team}: ${x.runs}/${x.wickets} (${ov(x)} Overs)</h3><table><tr><th>Batter</th><th>R</th><th>B</th><th>4s</th><th>6s</th><th>Status</th></tr>`;
+x.batters.forEach(p=>html+=`<tr><td>${p.name}</td><td>${p.runs}</td><td>${p.balls}</td><td>${p.fours}</td><td>${p.sixes}</td><td>${p.dismissal}</td></tr>`);
+html+="</table><p>Extras: "+x.extras+"</p><h4>Bowling</h4><table><tr><th>Bowler</th><th>O</th><th>R</th><th>W</th><th>Eco</th></tr>";
+x.bowlers.forEach(p=>html+=`<tr><td>${p.name}</td><td>${Math.floor(p.balls/6)}.${p.balls%6}</td><td>${p.runs}</td><td>${p.wickets}</td><td>${p.balls?(p.runs/(p.balls/6)).toFixed(2):"0.00"}</td></tr>`);
+html+="</table>";
 });
-document.getElementById("batters").innerHTML=batHTML;
-
-let b=activeBowler();
-document.getElementById("bowler").innerHTML=
-`<div class="row"><span>${b.name}</span><b>${Math.floor(b.balls/6)}.${b.balls%6}-${b.runs}-${b.wickets}</b></div>
-<div class="note">Economy: ${b.balls?(b.runs/(b.balls/6)).toFixed(2):"0.00"}</div>`;
-
-let cards="";
-match.innings.forEach((inn)=>{
-cards+=`<h3>${inn.team}: ${inn.runs}/${inn.wickets} (${overs(inn)} Overs)</h3>`;
-cards+=`<table><tr><th>Batter</th><th>R</th><th>B</th><th>4s</th><th>6s</th><th>Dismissal</th></tr>`;
-inn.batters.forEach(p=>{
-cards+=`<tr><td>${p.name}</td><td>${p.runs}</td><td>${p.balls}</td><td>${p.fours}</td><td>${p.sixes}</td><td>${p.dismissal}</td></tr>`;
-});
-cards+=`</table><p>Extras: ${inn.extras}</p>`;
-cards+=`<h4>Bowling</h4><table><tr><th>Bowler</th><th>O</th><th>R</th><th>W</th><th>Eco</th></tr>`;
-inn.bowlers.forEach(p=>{
-let eco=p.balls?(p.runs/(p.balls/6)).toFixed(2):"0.00";
-cards+=`<tr><td>${p.name}</td><td>${Math.floor(p.balls/6)}.${p.balls%6}</td><td>${p.runs}</td><td>${p.wickets}</td><td>${eco}</td></tr>`;
-});
-cards+="</table>";
-});
-if(match.result)cards+=`<h3>🏆 ${match.result}</h3>`;
-document.getElementById("scorecards").innerHTML=cards;
-
-document.getElementById("commentary").innerHTML=i.events.map(e=>
-`<div class="comment"><b>${e.over} • ${e.score}</b><br>${e.text}</div>`
-).join("")||"अभी कोई गेंद नहीं खेली गई।";
-
+if(match.result)html+="<h3>🏆 "+match.result+"</h3>";
+document.getElementById("scorecards").innerHTML=html;
+document.getElementById("commentary").innerHTML=i.events.map(e=>`<div class="comment"><b>${e.over} • ${e.score}</b><br>${e.text}</div>`).join("")||"अभी कोई गेंद नहीं खेली गई।";
 let disabled=!!match.result||i.complete;
 document.querySelectorAll("#game button").forEach(btn=>{
-if(btn.textContent!=="Undo"&&btn.textContent!=="Finish Match")btn.disabled=disabled;
+if(!["SAVE MATCH","DOWNLOAD","SHARE SCORE","NEW MATCH","HOME","Undo"].includes(btn.textContent.trim()))btn.disabled=disabled;
 });
+autoSave();
 }
-
+(function(){
+if(localStorage.getItem(KEY)){
+document.getElementById("resumeBtn").classList.remove("hidden");
+}
+})();
 </script>
 </body>
 </html>
