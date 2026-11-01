@@ -451,7 +451,46 @@ autoSave();
 if(localStorage.getItem(KEY)){
 document.getElementById("resumeBtn").classList.remove("hidden");
 }
-})();
+})();const LIVE_API = "https://silencricket-short-pro-apit-union-3a94.moqaddashusain12.workers.dev/api/live";
+
+async function loadLiveMatches() {
+  const status = document.getElementById("liveStatus");
+  const box = document.getElementById("liveMatches");
+
+  status.textContent = "मैच लोड हो रहे हैं...";
+  
+  try {
+    const response = await fetch(LIVE_API);
+    const result = await response.json();
+
+    if (!result.success || !result.data || result.data.length === 0) {
+      status.textContent = "अभी कोई मैच उपलब्ध नहीं है।";
+      box.innerHTML = "";
+      return;
+    }
+
+    const matches = result.data;
+    status.textContent = "कुल मैच: " + matches.length;
+
+    box.innerHTML = matches.map(match => `
+      <div style="padding:12px;margin:10px 0;border:1px solid #777;border-radius:10px;">
+        <b>${match.series_name || "Cricket Match"}</b>
+        <h3>${match.first_team?.name || "Team 1"} 
+        vs ${match.second_team?.name || "Team 2"}</h3>
+        <p>${match.first_team?.score || "—"} 
+        | ${match.second_team?.score || "—"}</p>
+        <p>${match.status_detail || match.state || ""}</p>
+      </div>
+    `).join("");
+
+  } catch (error) {
+    status.textContent = "Live Score लोड नहीं हुआ। Refresh करें।";
+    box.innerHTML = "";
+  }
+}
+
+loadLiveMatches();
+setInterval(loadLiveMatches, 60000);
 </script>
 </body>
 </html>
