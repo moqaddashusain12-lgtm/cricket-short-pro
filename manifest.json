@@ -1,0 +1,25 @@
+{
+  "name": "Cricket Short Pro",
+  "short_name": "Cricket Short",
+  "description": "Live Cricket Score and Manual Cricket Scorer",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#102b50",
+  "theme_color": "#102b50",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
