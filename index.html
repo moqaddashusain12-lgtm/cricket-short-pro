@@ -183,7 +183,15 @@ const LIVE_API="https://silencricket-short-pro-apit-union-3a94.moqaddashusain12.
 let match=null,undoStack=[];
 
 /* LIVE CRICKET SCORE */
+function fixLiveScore(value){
+if(value===null || value===undefined || value==="") return "—";
+return String(value).replace(/(\d+)\.6(?=\s*(?:ov|overs?)\b)/gi,(_,n)=>(Number(n)+1)+".0");
+}
 
+function fixLiveResult(value){
+if(!value) return "";
+return String(value).replace(/\bweeks\b/gi,"wickets").replace(/\bweek\b/gi,"wicket");
+  }
 function esc(v){
 return String(v??"").replace(/[&<>"']/g,c=>({
 "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
